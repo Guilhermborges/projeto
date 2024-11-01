@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliações de Desempenho - Sistema RH</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Gerenciamento de Avaliações de Desempenho</h2>
+        <p>Adicione e gerencie avaliações de desempenho dos funcionários.</p>
+
+        <!-- Formulário de Adição de Avaliação -->
+        <form id="evaluationForm">
+            <div class="mb-3">
+                <label for="employeeName" class="form-label">Nome do Funcionário</label>
+                <input type="text" class="form-control" id="employeeName" required>
+            </div>
+            <div class="mb-3">
+                <label for="evaluationPeriod" class="form-label">Período da Avaliação</label>
+                <input type="text" class="form-control" id="evaluationPeriod" required>
+            </div>
+            <div class="mb-3">
+                <label for="performanceDescription" class="form-label">Descrição do Desempenho</label>
+                <textarea class="form-control" id="performanceDescription" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Adicionar Avaliação</button>
+        </form>
+
+        <!-- Lista de Avaliações de Desempenho -->
+        <h3 class="mt-5">Avaliações de Desempenho</h3>
+        <ul id="evaluationList" class="list-group mt-3"></ul>
+    </div>
+
+    <script>
+        // Array temporário para armazenar avaliações de desempenho
+        let evaluationList = [];
+
+        // Renderizar a lista de avaliações na tela
+        function renderEvaluationList() {
+            const evaluationListElement = document.getElementById('evaluationList');
+            evaluationListElement.innerHTML = '';
+            evaluationList.forEach((evaluation, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                listItem.innerHTML = `<strong>${evaluation.employeeName}</strong> - ${evaluation.evaluationPeriod} <br> <small>${evaluation.performanceDescription}</small>`;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'btn btn-danger btn-sm';
+                deleteButton.textContent = 'Excluir';
+                deleteButton.addEventListener('click', () => {
+                    evaluationList.splice(index, 1);
+                    renderEvaluationList();
+                });
+
+                listItem.appendChild(deleteButton);
+                evaluationListElement.appendChild(listItem);
+            });
+        }
+
+        // Adicionar nova avaliação de desempenho
+        document.getElementById('evaluationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const employeeName = document.getElementById('employeeName').value;
+            const evaluationPeriod = document.getElementById('evaluationPeriod').value;
+            const performanceDescription = document.getElementById('performanceDescription').value;
+
+            evaluationList.push({ employeeName, evaluationPeriod, performanceDescription });
+            renderEvaluationList();
+            event.target.reset();
+        });
+
+        renderEvaluationList();
+    </script>
+</body>
+</html>
